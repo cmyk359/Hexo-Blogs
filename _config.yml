@@ -4,71 +4,71 @@
 
 # Site
 title: Hexo # 网站标题
-subtitle: ''    # 网站副标题
-description: '' # 网站描述
+subtitle: "" # 网站副标题
+description: "" # 网站描述
 keywords:
-author: John Doe    #作者
+author: John Doe #作者
 language: zh-CN #语言
-timezone: ''    # 网站时区, Hexo默认使用您电脑的时区
+timezone: "" # 网站时区, Hexo默认使用您电脑的时区
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com     # 你的站点Url
-permalink: :year/:month/:day/:title/    # 文章的 永久链接 格式 
-permalink_defaults:     # 永久链接中各部分的默认值
+url: http://example.com # 你的站点Url
+permalink: :year/:month/:day/:title/ # 文章的 永久链接 格式
+permalink_defaults: # 永久链接中各部分的默认值
 pretty_urls:
   trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
   trailing_html: true # Set to false to remove trailing '.html' from permalinks
 
 # Directory
-source_dir: source      # 资源文件夹，这个文件夹用来存放内容
-public_dir: public      # 公共文件夹，这个文件夹用于存放生成的站点文件。
-tag_dir: tags           # 标签文件夹
-archive_dir: archives   # 归档文件夹
-category_dir: categories    # 分类文件夹
-code_dir: downloads/code    # Include code 文件夹
-i18n_dir: :lang             # 国际化（i18n）文件夹
-skip_render:                 # 跳过指定文件的渲染，您可使用 glob 表达式来匹配路径。
+source_dir: source # 资源文件夹，这个文件夹用来存放内容
+public_dir: public # 公共文件夹，这个文件夹用于存放生成的站点文件。
+tag_dir: tags # 标签文件夹
+archive_dir: archives # 归档文件夹
+category_dir: categories # 分类文件夹
+code_dir: downloads/code # Include code 文件夹
+i18n_dir: :lang # 国际化（i18n）文件夹
+skip_render: # 跳过指定文件的渲染，您可使用 glob 表达式来匹配路径。
 
 # Writing
-new_post_name: :title.md        # 新文章的文件名称
-default_layout: post            # 预设布局
-titlecase: false                # 把标题转换为 title case
+new_post_name: :title.md # 新文章的文件名称
+default_layout: post # 预设布局
+titlecase: false # 把标题转换为 title case
 external_link:
-  enable: true      # 在新标签中打开链接
-  field: site       # Apply to the whole site
-  exclude: ''
-filename_case: 0        # 把文件名称转换为 (1) 小写或 (2) 大写
-render_drafts: false    # 是否显示草稿
-post_asset_folder: false    # 是否启动 Asset 文件夹
-relative_link: false        # 把链接改为与根目录的相对位址  
-future: true                # 显示未来的文章
-syntax_highlighter: highlight.js    #语法高亮
+  enable: true # 在新标签中打开链接
+  field: site # Apply to the whole site
+  exclude: ""
+filename_case: 0 # 把文件名称转换为 (1) 小写或 (2) 大写
+render_drafts: false # 是否显示草稿
+post_asset_folder: false # 是否启动 Asset 文件夹
+relative_link: false # 把链接改为与根目录的相对位址
+future: true # 显示未来的文章
+syntax_highlighter: highlight.js #语法高亮
 
-highlight:              # 内容中代码块的设置 
-  line_number: true     # 显示行数
-  auto_detect: false    # 如果未指定语言，则启用自动检测
-  tab_replace: ''       # 用 n 个空格替换 tabs；如果值为空，则不会替换 tabs
+highlight: # 内容中代码块的设置
+  line_number: true # 显示行数
+  auto_detect: false # 如果未指定语言，则启用自动检测
+  tab_replace: "" # 用 n 个空格替换 tabs；如果值为空，则不会替换 tabs
   wrap: true
   hljs: false
 prismjs:
   preprocess: true
   line_number: true
-  tab_replace: ''
+  tab_replace: ""
 
 # Home page setting
 # path: Root path for your blogs index page. (default = '')
 # per_page: Posts displayed per page. (0 = disable pagination)
 # order_by: Posts order. (Order by date descending by default)
-index_generator:    
-  path: ''
-  per_page: 10      #每页展示的文章数
-  order_by: -date   # 按照时间排序
+index_generator:
+  path: ""
+  per_page: 10 #每页展示的文章数
+  order_by: -date # 按照时间排序
 
 # Category & Tag
 default_category: uncategorized
-category_map:       # 分类别名
-tag_map:            # 标签别名
+category_map: # 分类别名
+tag_map: # 标签别名
 
 # Metadata elements
 ## https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
@@ -78,15 +78,15 @@ meta_generator: true
 ## Hexo uses Moment.js to parse and display date
 ## You can customize the date format as defined in
 ## http://momentjs.com/docs/#/displaying/format/
-date_format: YYYY-MM-DD     # 日期格式
-time_format: HH:mm:ss       # 时间格式
+date_format: YYYY-MM-DD # 日期格式
+time_format: HH:mm:ss # 时间格式
 ## updated_option supports 'mtime', 'date', 'empty'
-updated_option: 'mtime'
+updated_option: "mtime"
 
 # Pagination
 ## Set per_page to 0 to disable pagination
-per_page: 10            # 分页数量
-pagination_dir: page    # 分页目录
+per_page: 10 # 分页数量
+pagination_dir: page # 分页目录
 
 # Include / Exclude file(s)
 ## include:/exclude: options only apply to the 'source/' folder
@@ -97,10 +97,119 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: fluid  # 指定主题
+theme: fluid # 指定主题
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 #  部署部分的设置
 deploy:
-  type: ''  # 类型，常用的git 
+  type: "" # 类型，常用的git
+
+# hexo-oh-my-live2d 配置
+OhMyLive2d:
+  enable: true
+  CDN: https://unpkg.com/oh-my-live2d
+  option:
+    dockedPosition: "left" # 模型停靠位置 默认值: 'right' 可选值: 'left' | 'right'
+    # menus: |
+    #   (currentModel) =>{
+    #     console.log(currentModel);
+    #   }
+
+    # menus:
+    #   items: |
+    #     (defaultItems)=>{
+    #      return [
+    #        ...defaultItems,
+    #        {
+    #          id: 'github',
+    #          icon: 'github-fill',
+    #          title: '我的github',
+    #          onClick: ()=>window.open('https://github.com/hacxy')
+    #        }
+    #      ]
+    #     }
+
+    #   items:
+    #     - id: 'github'
+    #       icon: 'github-fill'
+    #       title: '我的github'
+    #       onClick: ()=>window.open('https://github.com/hacxy')
+
+    mobileDisplay: false # 是否在移动端显示
+    models:
+      - path: https://cdn.jsdelivr.net/gh/cmyk359/MyCDN/Hexo/static/live2d/Frieren/Frieren.model3.json # 模型文件路径
+        # mobilePosition: [-10, 23] # 移动端时模型在舞台中的位置。 默认值: [0,0] [横坐标, 纵坐标]
+        # mobileScale: 0.1 # 移动端时模型的缩放比例 默认值: 0.1
+        # mobileStageStyle: # 移动端时舞台的样式
+        #   width: 180
+        #   height: 166
+        motionPreloadStrategy: IDLE # 动作预加载策略 默认值: IDLE 可选值: ALL | IDLE | NONE
+        position: [-60, -100] # 模型在舞台中的位置。 默认值: [0,0] [横坐标, 纵坐标]
+        scale: 0.06 # 模型的缩放比例 默认值: 0.1
+        # showHitAreaFrames: false # 是否显示点击区域 默认值: false
+        stageStyle:
+          width: 250
+          height: 350
+
+      #其他模型
+      #   - path: 'https://registry.npmmirror.com/live2d-widget-model-koharu/1.0.5/files/assets/koharu.model.json'
+      #   scale: 0.12
+      #   position: [0, 0]
+      #   stageStyle:
+      #     width: 250
+      #   mobileScale: 0.08
+      #   mobilePosition: [0, 0]
+      #   mobileStageStyle: # 移动端时舞台的样式
+      #     width: 180
+      # - path: 'https://registry.npmmirror.com/live2d-widget-model-haruto/1.0.5/files/assets/haruto.model.json'
+      #   scale: 0.12
+      #   position: [0, 0]
+      #   mobileScale: 0.08
+      #   mobilePosition: [0, 0]
+      #   mobileStageStyle: # 移动端时舞台的样式
+      #     width: 180
+      #   stageStyle:
+      #     width: 250
+    parentElement: document.body #为组件提供一个父元素，如果未指定则默认挂载到 body 中
+    primaryColor: "var(--btn-bg)" # 主题色 支持变量
+    sayHello: false # 是否在初始化阶段打印项目信息
+    tips:
+      style:
+        width: 200
+        height: 90
+        left: calc(50% - 20px)
+        top: -100px
+        font-size: 14px
+      # mobileStyle:
+      #   width: 180
+      #   height: 80
+      #   left: calc(50% - 30px)
+      #   top: -100px
+      idleTips:
+        interval: 15000
+        # message:
+        #   - 你好呀~
+        #   - 欢迎来到我的小站~
+        # 自定义提示语 需要 引入 axios 库 ,也可以使用其他方法
+        message: |
+          function(){
+            return axios.get('https://v1.hitokoto.cn?c=i')
+              .then(function (response) {
+                return response.data.hitokoto ;
+              })
+              .catch(function (error) {
+                console.error(error);
+              });
+          }
+        # wordTheDay: true
+        # 自定义  https://v1.hitokoto.cn  数据
+        # wordTheDay: |
+        #   function(wordTheDayData){
+        #     return `${wordTheDayData.hitokoto}    by.${wordTheDayData.from}`;
+        #   }
+  # 具体方法请看: https://oml2d.com/guide/loadModel.html#oml2d-%E5%AE%9E%E4%BE%8B
+  # then: |
+  #    oml2d.onStageSlideIn(() => {
+  #    oml2d.tipsMessage('Oh My Live2D !!!', 3000, 10);
+  #    });
