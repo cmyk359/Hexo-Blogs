@@ -245,6 +245,8 @@ custom_css:
     - //cdn.jsdelivr.net/gh/bynotes/texiao/source/css/shubiao.css # 鼠标指针  使用别人的CDN链接可能会失效
 
 
+
+
 # 网页访问统计
 # Analysis of website visitors
 web_analytics:
@@ -461,8 +463,13 @@ open_graph:
 footer:
   # 页脚第一行文字的 HTML，建议保留 Fluid 的链接，用于向更多人推广本主题
   # HTML of the first line of the footer, it is recommended to keep the Fluid link to promote this theme to more people
-  content: '人山人海，欢迎你的到来
+  content: '
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
     <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a><br>
+    人山人海，欢迎你的到来
+    <i class="iconfont icon-love"></i><br>
+    <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
   '
 
   # 展示网站的 PV、UV 统计数
