@@ -213,3 +213,10 @@ OhMyLive2d:
   #    oml2d.onStageSlideIn(() => {
   #    oml2d.tipsMessage('Oh My Live2D !!!', 3000, 10);
   #    });
+
+# Generate categories from directory-tree
+# Dependencies: https://github.com/xu-song/hexo-auto-category
+# depth: the depth of directory-tree you want to generate, should > 0
+auto_category:
+  enable: true
+  depth: #设置生成几级目录分类，如文件在 /_posts/web/java/spring/example.md，depth=1 则只生成 web分类，其下没有其他子目录分类
