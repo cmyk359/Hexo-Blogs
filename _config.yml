@@ -7,13 +7,13 @@ title: Hexo # 网站标题
 subtitle: "" # 网站副标题
 description: "" # 网站描述
 keywords:
-author: John Doe #作者
+author: 猫爪在上 #作者
 language: zh-CN #语言
 timezone: "" # 网站时区, Hexo默认使用您电脑的时区
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com # 你的站点Url
+url: http://catpaws.top # 你的站点Url
 permalink: :year/:month/:day/:title/ # 文章的 永久链接 格式
 permalink_defaults: # 永久链接中各部分的默认值
 pretty_urls:
@@ -47,7 +47,7 @@ syntax_highlighter: highlight.js #语法高亮
 
 highlight: # 内容中代码块的设置
   line_number: true # 显示行数
-  auto_detect: false # 如果未指定语言，则启用自动检测
+  auto_detect: true # 如果未指定语言，则启用自动检测
   tab_replace: "" # 用 n 个空格替换 tabs；如果值为空，则不会替换 tabs
   wrap: true
   hljs: false
