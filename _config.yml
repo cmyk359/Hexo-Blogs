@@ -14,7 +14,11 @@ timezone: "" # 网站时区, Hexo默认使用您电脑的时区
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
 url: http://catpaws.top # 你的站点Url
-permalink: :year/:month/:day/:title/ # 文章的 永久链接 格式
+permalink: :abbrlink/
+abbrlink:
+  alg: crc32 #support crc16(default) and crc32 进制
+  rep: hex #support dec(default) and hex  算法
+  drafts: false #(true)Process draft,(false)Do not process draft. false(default)
 permalink_defaults: # 永久链接中各部分的默认值
 pretty_urls:
   trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
@@ -103,7 +107,10 @@ theme: fluid # 指定主题
 ## Docs: https://hexo.io/docs/one-command-deployment
 #  部署部分的设置
 deploy:
-  type: "" # 类型，常用的git
+  type: "git"
+  repo:
+    github: git@github.com:cmyk359/Hexo-Blogs.git #仓库地址 推荐使用ssh地址，并将本地Git令牌配置到远程仓库
+  branch: main #分支
 
 # hexo-oh-my-live2d 配置
 OhMyLive2d:
@@ -220,3 +227,4 @@ OhMyLive2d:
 auto_category:
   enable: true
   depth: #设置生成几级目录分类，如文件在 /_posts/web/java/spring/example.md，depth=1 则只生成 web分类，其下没有其他子目录分类
+

@@ -1009,8 +1009,7 @@ about:
     - { class: "iconfont icon-qq-fill", qrcode: "https://cdn.jsdelivr.net/gh/cmyk359/MyCDN/Hexo/static/img/qq.jpg", tip: "QQ" }
     - { class: "iconfont icon-wechat-fill", qrcode: "https://cdn.jsdelivr.net/gh/cmyk359/MyCDN/Hexo/static/img/wechat.png" ,tip: "微信"}
     - { class: "iconfont icon-mail",tip: "邮箱"}  #TODO 设置邮箱
-
-      
+    
       
 #---------------------------
 # 自定义页
@@ -1025,7 +1024,6 @@ page:
   banner_img: https://cdn.jsdelivr.net/gh/cmyk359/MyCDN/Hexo/static/img/timeline-bg.png
   banner_img_height: 60
   banner_mask_alpha: 0.3
-
 
 #---------------------------
 # 404页
