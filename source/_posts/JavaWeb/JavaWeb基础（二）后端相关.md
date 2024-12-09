@@ -1509,13 +1509,13 @@ public class Demo {
 
     public static void main(String[] args) throws Exception {
         // Endpoint以华东1（杭州）为例，其它Region请按实际情况填写。
-        String endpoint = "https://oss-cn-chengdu.aliyuncs.com";
+        String endpoint = "xxxxxx";
         // 从环境变量中获取访问凭证。运行本代码示例之前，请确保已设置环境变量OSS_ACCESS_KEY_ID和OSS_ACCESS_KEY_SECRET。
         //EnvironmentVariableCredentialsProvider credentialsProvider = CredentialsProviderFactory.newEnvironmentVariableCredentialsProvider();
-        String accessKeyId ="LTAI5tSjuKzkDaB9LTAVxePM";
-        String accessKeySecret ="QyoRbTEK9kB8eZ7sWqSkj4W8YcdI0Z";
+        String accessKeyId ="xxxxxxx";
+        String accessKeySecret ="xxxxxxx";
         // 填写Bucket名称，例如examplebucket。
-        String bucketName = "maozhuazaishang";
+        String bucketName = "xxxxxx";
         // 填写Object完整路径，完整路径中不能包含Bucket名称，例如exampledir/exampleobject.txt。
         String objectName = "1.png";
         // 填写本地文件的完整路径，例如D:\\localpath\\examplefile.txt。
@@ -1574,10 +1574,10 @@ import java.util.UUID;
 @Component
 public class AliOSSUtils {
 
-    private String endpoint = "https://oss-cn-chengdu.aliyuncs.com";
-    private String accessKeyId = "LTAI5tSjuKzkDaB9LTAVxePM";
-    private String accessKeySecret = "QyoRbTEK9kB8eZ7sWqSkj4W8YcdI0Z";
-    private String bucketName = "maozhuazaishang";
+    private String endpoint = "xxxxxxx";
+    private String accessKeyId = "xxxxxxx";
+    private String accessKeySecret = "xxxxxxx";
+    private String bucketName = "xxxxxxx";
 
     /**
      * 实现上传图片到OSS
@@ -1712,10 +1712,10 @@ mybatis:
 #阿里云OSS配置
 aliyun:
   oss:
-    endpoint: https://oss-cn-chengdu.aliyuncs.com
-    accessKeyId: LTAI5tSjuKzkDaB9LTAVxePM
-    accessKeySecret: QyoRbTEK9kB8eZ7sWqSkj4W8YcdI0Z
-    bucketName: maozhuazaishang
+    endpoint: xxxxxx
+    accessKeyId: xxxxxx
+    accessKeySecret: xxxxxx
+    bucketName: xxxxxxx
 
 ```
 
@@ -1798,10 +1798,10 @@ public class AliOSSProperties {
 #阿里云OSS配置
 aliyun:
   oss:
-    endpoint: https://oss-cn-chengdu.aliyuncs.com
-    accessKeyId: LTAI5tSjuKzkDaB9LTAVxePM
-    accessKeySecret: QyoRbTEK9kB8eZ7sWqSkj4W8YcdI0Z
-    bucketName: maozhuazaishang
+    endpoint: xxxxxxx
+    accessKeyId: xxxxxx
+    accessKeySecret: xxxxxxx
+    bucketName: xxxxxxxx
 
 ```
 
