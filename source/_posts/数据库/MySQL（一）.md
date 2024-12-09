@@ -7,6 +7,7 @@ categories:
   - 数据库
 abbrlink: 8d742da7
 date: 2024-12-08 21:56:01
+index_img: https://cdn.jsdelivr.net/gh/cmyk359/MyCDN/Hexo/static/img/art-post2.jpg
 ---
 
 <meta name = "referrer", content = "no-referrer"/>
