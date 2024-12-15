@@ -1931,7 +1931,7 @@ public class LoginCheckFilter implements Filter {
 
 
 
-> 拦截器详解（拦截路径、执行流程）
+> 拦截器详解
 
 拦截路径：
 
@@ -1949,6 +1949,12 @@ public void addInterceptors(InterceptorRegistry registry){
 ![image-20241209172035778](https://gitee.com/cmyk359/img/raw/master/img/image-20241209172035778-2024-12-917:20:37.png)
 
 
+
+多个拦截器的执行顺序：
+
+当拦截器添加后，会被封装成一个注册器`InterceptorRegistration`，它有一个order属性，用来控制当前拦截器的执行顺序，默认为0，即按照添加顺序执行。**order越小，执行优先级越高**。
+
+![image-20241211211406367](https://gitee.com/cmyk359/img/raw/master/img/image-20241211211406367-2024-12-1121:15:20.png)
 
 拦截器执行流程
 

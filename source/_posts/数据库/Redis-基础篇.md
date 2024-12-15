@@ -163,15 +163,15 @@ String类型常见命令：
 * MSET：批量添加多个String类型的键值对
 * MGET：根据多个key获取多个String类型的value
 
+  
 
-
-* INCR：让一个整型的key自增1
+* INCR：让一个整型的key自增1。
 
 * INCRBY:让一个整型的key自增并指定步长，例如：incrby num 2 让num值自增2
 
 * INCRBYFLOAT：让一个浮点类型的数字自增并指定步长
 
-  
+> 以上三个数值增加的函数，如果所操作的key不存在，则**在执行操作前将其设置为 0**。
 
 * SETNX：添加一个String类型的键值对，前提是这个key不存在，否则不执行（真正的新增操作）
 
@@ -846,3 +846,24 @@ class HmDianPingApplicationTests {
 此时存储的内容没有之前的class信息，节约了存储空间
 
 <img src="https://gitee.com/cmyk359/img/raw/master/img/image-20241211013242601-2024-12-1101:32:44.png" alt="image-20241211013242601" style="zoom:80%;" />
+
+补充：
+
+Windows的Redis图形化客户端连接不上虚拟机中的Redis问题
+
+**1、修改redis.conf配置文件**
+
+![image-20241212095439904](https://gitee.com/cmyk359/img/raw/master/img/image-20241212095439904-2024-12-1209:56:28.png)
+
+**2、在linux下的防火墙中开放6379端口**
+
+```bash
+firewall-cmd --zone=public --add-port=6379/tcp --permanent
+```
+
+**3、重启防火墙**
+
+```bash
+systemctl restart firewalld
+```
+

@@ -269,7 +269,11 @@ Lambda写法：
 
 ​	Java8的Stream使用的是函数式编程模式，如同它的名字一样，它可以被用来对**集合或数组**进行链状流式的操作。可以更方便的让我们对集合或数组操作。
 
+特点：
 
+- 惰性求值：如果没有终结操作，没有中间操作是不会得到执行的
+- 流是一次性的：一旦一个流对象经过一个终结操作后。这个流就不能再被使用
+- <u>**非破坏性**</u>：Stream API 设计为对数据源进行一系列操作（如过滤、映射、排序等），然后生成一个新的流或结果，而不会更改原始数据
 
 ### 3.2 案例数据准备
 
@@ -408,11 +412,11 @@ public class Book {
         map.put("蜡笔小新",19);
         map.put("黑子",17);
         map.put("日向翔阳",16);
-        //将map中的每个键值对封装在一个entry对象中，将一个个entry对象保存在一个set中
-        Set<Map.Entry<String, Integer>> entries = map.entrySet();
-        entries.stream()
-                .filter(entry -> entry.getValue() > 16)
-                .forEach(entry -> System.out.println(entry.getKey()+" ---"+entry.getValue()));
+        //map中的每个键值对封装在一个entry对象中，一个个entry对象保存在一个set中
+        map.entrySet()
+            .stream()
+             .filter(entry -> entry.getValue() > 16)
+             .forEach(entry -> System.out.println(entry.getKey()+" ---"+entry.getValue()));
 ~~~~
 
 
@@ -1151,11 +1155,7 @@ System.out.println(max);
 
 
 
-### 3.5 注意事项
 
-- 惰性求值（如果 没有终结操作，没有中间操作是不会得到执行的）
-- 流是一次性的（一旦一个流对象经过一个终结操作后。这个流就不能再被使用）
-- **不会影响原数据**（我们在流中可以多数据做很多处理。但是正常情况下是不会影响原来集合中的元素的。这往往也是我们期望的）
 
 
 
