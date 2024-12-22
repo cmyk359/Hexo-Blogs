@@ -92,7 +92,7 @@ date: 2024-12-11 01:44:29
 
 [参考视频](https://www.bilibili.com/video/BV1cr4y1671t?vd_source=51d78ede0a0127d1839d6abf9204d1ee&spm_id_from=333.788.player.switch&p=5)
 
-## 二、Redis常见命令
+## 二、Redis常用数据结构
 
 ### 2.1、Redis数据结构介绍
 
@@ -133,14 +133,14 @@ Redis将操作不同数据类型的命令做了分组，可以在[官网](https:
 - `EXPIRE`：给一个key设置有效期，有效期到期时该key会被自动删除
 
 - `TTL`：查看一个KEY的剩余有效期
+  > i. 当前key没有设置过期时间，返回-1.
+  >
+  > ii. 当前key有设置过期时间，而且key已经过期，返回-2.
+  >
+  > iii. 当前key有设置过期时间，且key还没有过期，故会返回key的正常剩余时间.
 
 - `Type`: 查看一个key的数据类型
 
-  > i. 当前key没有设置过期时间，所以会返回-1.
-  >
-  > ii. 当前key有设置过期时间，而且key已经过期，所以会返回-2.
-  >
-  > iii. 当前key有设置过期时间，且key还没有过期，故会返回key的正常剩余时间.
 
 ### 2.3、String类型
 
@@ -294,6 +294,10 @@ OK
 "male"
 
 ```
+
+- HEXISTS key field：判断指定key中是否已存在field字段，存在返回1，不存在返回0.
+- HDEL key field [field ...]：删除指定key中的field字段，如果指定field不存在则忽略；如果该key的所有字段都被删除，则该key也被删除。如果 key 不存在，则将其视为空散列，此命令返回 0。
+- HLEN key：返回该Key所含有的field字段的数量
 
 ### 2.6、List类型
 
@@ -505,9 +509,19 @@ SortedSet的常见命令有：
 
 ```
 
+## 三、Redis三种特殊数据结构
+
+### 3.1、[GEO地理位置](https://catpaws.top/e0606bbf/#六附近的商户)
 
 
-## 三、Redis的Java客户端
+
+### 3.2、[BitMap](https://catpaws.top/e0606bbf/#七用户签到)
+
+
+
+### 3.3、[Hyperloglog](https://catpaws.top/e0606bbf/#八uv网页的访问量统计)
+
+## 四、Redis的Java客户端
 
 在Redis官网中提供了各种语言的客户端，地址：https://redis.io/clients
 
@@ -516,7 +530,7 @@ SortedSet的常见命令有：
 - jedis和Lettuce：这两个主要是提供了Redis命令对应的API，方便我们操作Redis，而SpringDataRedis又对这两种做了抽象和封装（SpringBoot**默认使用Lettuce**），因此后期可以以SpringDataRedis来学习。
 - Redisson：是在Redis基础上实现了分布式的可伸缩的java数据结构，例如Map.Queue等，而且支持跨进程的同步机制：Lock.Semaphore等待，比较适合用来实现特殊的功能需求。
 
-### 3.1、Jedis
+### 4.1、Jedis
 
 #### 快速入门
 
@@ -642,7 +656,7 @@ public class JedisConnectionFactory {
 
 2. 当我们使用了连接池后，当我们关闭连接其实并不是关闭，而是将Jedis连接**归还**给连接池。
 
-### 3.2、SpringDataRedis
+### 4.2、SpringDataRedis
 
 SpringData是Spring中数据操作的模块，包含对各种数据库的集成，其中对Redis的集成模块就叫做SpringDataRedis，[官网地址](https://spring.io/projects/spring-data-redis)
 
@@ -847,7 +861,7 @@ class HmDianPingApplicationTests {
 
 <img src="https://gitee.com/cmyk359/img/raw/master/img/image-20241211013242601-2024-12-1101:32:44.png" alt="image-20241211013242601" style="zoom:80%;" />
 
-补充：
+## 补充
 
 Windows的Redis图形化客户端连接不上虚拟机中的Redis问题
 

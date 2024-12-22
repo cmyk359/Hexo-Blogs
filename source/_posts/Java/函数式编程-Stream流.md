@@ -11,6 +11,7 @@ index_img: https://cdn.jsdelivr.net/gh/cmyk359/MyCDN/Hexo/static/img/art-post3.j
 ---
 
 <meta name = "referrer", content = "no-referrer"/>
+> [Demo地址](https://github.com/cmyk359/JavaStream_demo)
 
 ## 一、 概述
 
@@ -276,6 +277,8 @@ Lambda写法：
 - <u>**非破坏性**</u>：Stream API 设计为对数据源进行一系列操作（如过滤、映射、排序等），然后生成一个新的流或结果，而不会更改原始数据
 
 ### 3.2 案例数据准备
+
+[Demo地址](https://github.com/cmyk359/JavaStream_demo)
 
 ~~~~xml
     <dependencies>
@@ -929,6 +932,33 @@ System.out.println(map);
 ~~~~
 
 ![image-20240601205542796](https://gitee.com/cmyk359/img/raw/master/img/image-20240601205542796-2024-6-120:55:51.png)
+
+
+
+
+
+`Collectors.groupingBy`
+
+将List的数据按照指定字段分组，结果为一个Map，key为分组字段，value为每组的元素。通过遍历Map的entrySet获取每组的key和value。
+
+```java
+	//1、获取所有店铺
+    List<Shop> shops = shopService.list();
+    //2、根据Shop的typeID字段分组,typeId一致的放到一个集合
+    Map<Long, List<Shop>> collect = shops.stream()
+        .collect(Collectors.groupingBy(Shop::getTypeId));
+
+    //3、遍历entrySet
+    for (Map.Entry<Long, List<Shop>> entry : collect.entrySet()) {
+        //3.1 获取类型id
+        Long typeId = entry.getKey();
+        String key = SHOP_GEO_KEY + typeId;
+        //3.2 获取对应店铺集合
+        List<Shop> shopList = entry.getValue();
+    }
+```
+
+
 
 ##### 查找与匹配
 
