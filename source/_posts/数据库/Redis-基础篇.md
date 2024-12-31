@@ -872,12 +872,18 @@ Windows的Redis图形化客户端连接不上虚拟机中的Redis问题
 **2、在linux下的防火墙中开放6379端口**
 
 ```bash
-firewall-cmd --zone=public --add-port=6379/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=6379/tcp --permanent
 ```
 
-**3、重启防火墙**
+**3、重新载入firewalld以应用更改**
 
 ```bash
-systemctl restart firewalld
+sudo firewall-cmd --reload
+```
+
+**4、检查端口是否已开放**
+
+```bash
+sudo firewall-cmd --zone=public --list-ports
 ```
 

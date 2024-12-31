@@ -1,5 +1,5 @@
 ---
-title: Redis-实战篇
+title: Redis - 实战篇
 tags:
   - 缓存问题
   - 全局唯一ID
@@ -2102,9 +2102,11 @@ if (id.equals(threadId)) {
 
 
 
-##### Redis的Lua脚本
+##### Redis调用Lua脚本
 
-Lua 脚本在 Redis 中是一种非常强大的功能，它允许你将多个 Redis 命令打包成一个原子操作来执行，这样可以确保数据的一致性和完整性。Lua是一种编程语言,[基本语法参考](https://www.runoob.com/lua/lua-tutorial.html)
+Lua 脚本在 Redis 中是一种非常强大的功能，它允许你将多个 Redis 命令打包成一个原子操作来执行，这样可以确保数据的一致性和完整性。Lua是一种编程语言,[基本语法参考](https://catpaws.top/29be09bb/#lua入门)
+
+
 
 在 Lua 脚本中，你可以通过 `redis.call` 方法来调用任何 Redis 命令。这个方法的第一个参数是 Redis 命令的名字，随后的参数是这个命令所需要的任何参数。
 
