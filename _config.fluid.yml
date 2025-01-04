@@ -228,7 +228,7 @@ color:
 
 
 font:
-  font_size: 23px
+  font_size: 20px
   font_family: "LXGW WenKai"
   letter_spacing: 0.02em
   code_font_size: 85%

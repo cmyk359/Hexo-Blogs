@@ -2046,13 +2046,9 @@ Redis的Key虽然可以自定义，但最好遵循下面的几个最佳实践约
 3. 方便管理
 4. 更节省内存
 
-Redis的`key`的数据类型为String，而Redis中String类型的底层编码方式有三种，分别是`int`、`embstr`和`raw`。
 
-当存储的值为整数，且值的大小可以用long类型表示时，Redis使用int编码。在int编码中，String对象的实际值会被存储在一个long类型的整数中。这种编码方式的优点是存储空间小，且无需进行额外的解码操作。
 
-当存储的值为字符串，且长度小于等于**44字节**时，Redis使用embstr编码。在embstr编码中，<u>RedisObject对象头和SDS（Simple Dynamic String）对象在内存中地址是连在一起的，申请内存时只需要调用一次内存分配函数，效率较高</u>。
-
-当存储的值为字符串，且长度大于44字节时，Redis使用raw编码。在raw编码中，RedisObject对象头和SDS对象在内存地址不是连续的，需要分配两次内存，性能较差。
+为什么key的长度不要超过44字节？查看[Redis的String类型编码详解](https://catpaws.top/284457ed/#string)
 
 > 通过`OBJECT ENCODING <key>`命令可以查看一个数据库键的值对象的编码。
 
