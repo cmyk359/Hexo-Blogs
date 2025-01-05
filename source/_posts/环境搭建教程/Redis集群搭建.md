@@ -1,11 +1,11 @@
 ---
 title: Redis集群搭建
 abbrlink: 3e4345d9
+archive: true
+hide: true
 categories:
   - 环境搭建教程
-archive: true
 date: 2024-12-24 16:52:03
-hide: true
 tags:
 ---
 <meta name = "referrer", content = "no-referrer"/>

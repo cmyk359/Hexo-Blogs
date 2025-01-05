@@ -6,6 +6,16 @@ categories:
 abbrlink: 284457ed
 date: 2024-12-30 15:18:46
 tags:
+  - 动态字符串SDS
+  - IntSet
+  - Dict
+  - ZipList
+  - QuickList
+  - SkipList
+  - RedisObject
+  - Linux IO模型
+  - Redis网络模型
+  - 内存策略
 ---
 
 <meta name = "referrer", content = "no-referrer"/>

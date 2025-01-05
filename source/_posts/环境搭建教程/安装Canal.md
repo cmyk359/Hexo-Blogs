@@ -1,9 +1,9 @@
 ---
 title: 安装Canal
 hide: true
+abbrlink: ceeb6373
 categories:
   - 环境搭建教程
-abbrlink: ceeb6373
 date: 2024-12-27 23:12:26
 tags:
 ---

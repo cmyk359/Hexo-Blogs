@@ -229,3 +229,36 @@ auto_category:
   enable: true
   depth: #设置生成几级目录分类，如文件在 /_posts/web/java/spring/example.md，depth=1 则只生成 web分类，其下没有其他子目录分类
 
+# hexo-all-minifier 文件压缩配置
+all_minifier: true
+# 压缩HTML文件
+html_minifier:
+  enable: true
+  ignore_error: false
+  silent: false
+  exclude:
+#压缩css文件
+css_minifier:
+  enable: true
+  silent: false
+  exclude:
+    - "*.min.css"
+#压缩图片文件
+image_minifier:
+  enable: true
+  interlaced: false
+  multipass: false
+  optimizationLevel: 2
+  pngquant: false
+  progressive: false
+  silent: false
+
+#js压缩
+js_minifier:
+  enable: true
+  mangle: true
+  silent: false
+  output:
+  compress:
+  exclude:
+    - "*.min.js"
