@@ -13,7 +13,7 @@ timezone: "" # 网站时区, Hexo默认使用您电脑的时区
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://catpaws.top # 你的站点Url
+url: https://catpaws.top # 你的站点Url
 permalink: :abbrlink/
 abbrlink:
   alg: crc32 #support crc16(default) and crc32 进制
@@ -107,11 +107,15 @@ theme: fluid # 指定主题
 ## Docs: https://hexo.io/docs/one-command-deployment
 #  部署部分的设置
 deploy:
-  type: ""
-  # type: "git"
-  # repo:
-  #   github: git@github.com:cmyk359/Hexo-Blogs.git #仓库地址 推荐使用ssh地址，并将本地Git令牌配置到远程仓库
-  # branch: main #分支
+  - type: upyun
+    serviceName: catpaws-blog
+    operatorName: 15229579917
+    operatorPassword: x9DCys6O1xQdSJNoglixWxGcQZE2U0Kj
+    path: /
+
+  - type: git
+    repo: https://github.com/cmyk359/cmyk359.github.io.git
+    branch: main
 
 # hexo-oh-my-live2d 配置
 OhMyLive2d:
@@ -146,7 +150,8 @@ OhMyLive2d:
 
     mobileDisplay: false # 是否在移动端显示
     models:
-      - path: https://cdn.jsdelivr.net/gh/cmyk359/MyCDN/Hexo/static/live2d/Frieren/Frieren.model3.json # 模型文件路径
+      - #path: https://cdn.jsdelivr.net/gh/cmyk359/MyCDN/Hexo/static/live2d/Frieren/Frieren.model3.json # 模型文件路径
+        path: https://catpaws.top/blog-resource/live2d/Frieren/Frieren.model3.json
         # mobilePosition: [-10, 23] # 移动端时模型在舞台中的位置。 默认值: [0,0] [横坐标, 纵坐标]
         # mobileScale: 0.1 # 移动端时模型的缩放比例 默认值: 0.1
         # mobileStageStyle: # 移动端时舞台的样式

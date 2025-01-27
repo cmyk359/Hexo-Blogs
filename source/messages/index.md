@@ -32,4 +32,3 @@ banner_img_height: 65
 </script>
 
 {% endraw %}
-

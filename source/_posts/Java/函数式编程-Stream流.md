@@ -7,7 +7,7 @@ categories:
   - Java
 abbrlink: 146f67fb
 date: 2024-12-09 11:04:20
-index_img: https://cdn.jsdelivr.net/gh/cmyk359/MyCDN/Hexo/static/img/art-post3.jpg
+index_img: https://catpaws.top/blog-resource/imgs/art-post3.jpg
 ---
 
 <meta name = "referrer", content = "no-referrer"/>

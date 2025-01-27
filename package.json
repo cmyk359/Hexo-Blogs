@@ -5,7 +5,8 @@
   "scripts": {
     "build": "hexo generate",
     "clean": "hexo clean",
-    "deploy": "hexo deploy",
+    "deploy": "hexo clean && hexo g -d",
+    "start": "hexo clean && hexo g && hexo s",
     "server": "hexo server",
     "netlify": "npm run clean && npm run build"
   },
@@ -17,6 +18,8 @@
     "hexo-abbrlink": "^2.2.1",
     "hexo-all-minifier": "^0.5.7",
     "hexo-auto-category": "^0.2.2",
+    "hexo-deployer-git": "^4.0.0",
+    "hexo-deployer-upyundeploy": "^1.0.1",
     "hexo-generator-archive": "^2.0.0",
     "hexo-generator-category": "^2.0.0",
     "hexo-generator-index": "^4.0.0",

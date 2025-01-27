@@ -11,7 +11,7 @@ tags:
 categories:
   - JavaWeb
 date: 2024-12-09 12:08:45
-index_img: https://cdn.jsdelivr.net/gh/cmyk359/MyCDN/Hexo/static/img/art-post5.jpg
+index_img: https://catpaws.top/blog-resource/imgs/art-post5.jpg
 ---
 
 <meta name = "referrer", content = "no-referrer"/>

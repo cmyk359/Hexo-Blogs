@@ -5,7 +5,7 @@ tags:
   - Redis基本数据类型
   - Jedis
   - SpringDataRedis
-index_img: 'https://cdn.jsdelivr.net/gh/cmyk359/MyCDN/Hexo/static/img/art-post6.jpg'
+index_img: https://catpaws.top/blog-resource/imgs/art-post6.jpg
 categories:
   - 数据库
 abbrlink: bcfabe89
@@ -112,7 +112,7 @@ Redis将操作不同数据类型的命令做了分组，可以在[官网](https:
 
 ### 2.2、Redis通用命令
 
-通用指令是部分数据类型的，都可以使用的指令。[查看所有通用命令](https://redis.io/docs/latest/commands/?group=generic)
+通用指令是所有数据类型都可以使用的指令。[查看所有通用命令](https://redis.io/docs/latest/commands/?group=generic)
 
 可以控制台查看命令的用法，如：
 
