@@ -3,15 +3,12 @@ title: 留言板
 date: 2025-01-04 20:46:28
 keywords: 留言板
 comment: true
-banner_img: https://cdn.jsdelivr.net/gh/honjun/cdn@1.4/img/banner/comment.jpg
-banner_img_height: 65
+banner_img: https://catpaws.top/blog-resource/imgs/comment.jpg
+banner_img_height: 67
+banner_mask_alpha: 0
 ---
 
 {% raw %}
-<div class="toc-container">
-    <div class="toc" style="background: none;">
-    </div>
-</div>
 <div class="entry-content">
   <div class="poem-wrap">
     <div class="poem-border poem-left"></div>
@@ -30,5 +27,4 @@ banner_img_height: 65
     info.innerHTML = '【' + result.data.origin.dynasty + '】' + result.data.origin.author + '《' + result.data.origin.title + '》'
   });
 </script>
-
 {% endraw %}

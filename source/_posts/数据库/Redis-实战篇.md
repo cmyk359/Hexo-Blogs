@@ -595,15 +595,40 @@ public Result queryTypeList() {
 
 3. 先操作缓存还是先操作数据库（线程安全问题）？
 
-   先删除缓存，再操作数据库。在多线程下可能会出现如下情况，线程1删完缓存，准备更新数据库，此时线程2查询缓存，缓存未命中，查询数据库，并将查询结果写回缓存。**由于数据库的写操作耗时较长**，线程2从数据库中查询到的还是原来的旧数据的数据，写入缓存的也是旧数据。最终结果是数据库中的是新数据，而缓存中的是旧数据，造成数据的不一致。并且写数据库的耗时较长，**很可能发生**如下情况。
+   先删除缓存，再操作数据库。在多线程下可能会出现如下情况：
+
+   - 线程1执行写操作，首先删除缓存，准备更新数据库（耗时较长）
+   - 线程2查询数据，缓存未命中，读取数据库旧值并回填缓存。
+   - 线程1完成数据库更新
+   - 后序查询请求都会命中过期的缓存
+
+   从清空缓存到更新完数据库，整个过程耗时较长，其他线程很有可能在此期间读到数据库中的旧数据并写入缓存。缓存中存在旧数据，后续请求持续读到旧值，直到缓存过期或主动删除。
 
    <img src="https://gitee.com/cmyk359/img/raw/master/img/image-20241212142243185-2024-12-1214:22:52.png" alt="image-20241212142243185" style="zoom:67%;" />
 
-   <u>先操作数据库，再删除缓存</u>。此时可能出现线程安全的情况如下：在线程1查询缓存，若命中则返回数据，此时未命中，需要查询数据库，将数据 v = 10 写入缓存。线程2**在线程1查询完数据库，将数据写入缓存期间**到来，更新数据库 v = 20，再删除缓存（此时缓存啥也没有）,之后线程1才完成向缓存中写入查询结果 v = 10。此时数据库中的最新数据为v=20，但缓存中为v = 10，发生数据不一致。但是写入Redis缓存的用时很短，不太可能在此期间完成更新数据库和删除缓存的可能，发生数据不一致的可能很小。
+   ***
 
-   <img src="https://gitee.com/cmyk359/img/raw/master/img/image-20241212143501915-2024-12-1214:35:03.png" alt="image-20241212143501915" style="zoom:67%;" />
+   <u>先操作数据库，再删除缓存</u>。此时可能出现线程安全的情况如下：
+   
+   - 线程1执行写操作，先更新数据库，此时尚未删除缓存
+   - 线程2查询数据，命中缓存中的旧数据，返回。
+   - 线程1删除缓存
+   - 后续请求查询缓存未命中，从数据库读取新值并回填缓存。
 
-
+   这种方法会造成短暂的数据不一致，但缓存删除后数据恢复一致。后续请求缓存新值，无长期问题。
+   
+   <img src="https://gitee.com/cmyk359/img/raw/master/img/image-20250402183231336-2025-4-218:43:18.png" style="zoom:80%;" />
+   
+   还有另一种可能的情况：
+   
+   - 由于缓存过期或者首次查询，线程1查询缓存未命中，开始读取数据库v=10。
+   - 在线程1读取数据库的过程中，线程2更新数据库为v=20，并删除缓存。
+   - 线程2的删除缓存操作完成。
+   - 线程1将读取到的旧数据v=10写入缓存。
+   
+   但是写入Redis缓存的用时很短，不太可能在此期间完成更新数据库和删除缓存的可能，发生数据不一致的可能很小。
+   
+   <img src="https://gitee.com/cmyk359/img/raw/master/img/image-20241212143501915-2024-12-1214:35:03.png" style="zoom:80%;" />
 
 综上可得缓存更新策略的最佳实践方案
 
@@ -776,9 +801,7 @@ public Result queryShopById(Long id) {
 
 ### 2.6、缓存击穿
 
-**缓存击穿问题**也叫**热点Key问题**，就是⼀个被**⾼并发访问**并且**缓存重建业务较复杂**的key突然失效
-
-了，⽆数的请求访问会在瞬间给数据库带来巨⼤的冲击。
+**缓存击穿问题**也叫**热点Key问题**，就是⼀个被**⾼并发访问**并且**缓存重建业务较复杂**的key突然失效了，⽆数的请求访问会在瞬间给数据库带来巨⼤的冲击。
 
 <img src="https://gitee.com/cmyk359/img/raw/master/img/image-20241212162120403-2024-12-1216:21:57.png" alt="image-20241212162120403" style="zoom: 80%;" />
 
@@ -808,11 +831,11 @@ public Result queryShopById(Long id) {
 
 #### 利用互斥锁解决店铺详情查询的缓存击穿问题
 
-整体思路：相较于原来从缓存中查询不到数据后直接查询数据库而言，现在的方案是 ：
+整体思路：相较于原来从缓存中查询不到数据后直接查询数据库，现在的方案是: 
 
 进行查询之后，如果从缓存没有查询到数据，则进行互斥锁的获取
 
-1. 若获取成功，则**再次检测redis缓存是否存在**，做DoubleCheck，如果存在则无需重建缓存，如果不存在则查询数据库重建缓存。
+1. 若获取成功，则**再次检测redis缓存是否存在**，做**DoubleCheck**，如果存在则无需重建缓存，如果不存在则查询数据库重建缓存。
 
    > i. 对于第一次获取就得到互斥锁的线程而言，再次检测redis缓存，结果还是不存在，然后重建缓存。
    >
@@ -1957,7 +1980,7 @@ Jmeter200个线程测试结果：同一个用户只扣减了一次库存，订�
 
 模拟集群环境：
 
-![模拟集群环境](C:%5CUsers%5C86152%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20241216201615254.png)
+![模拟集群环境](https://gitee.com/cmyk359/img/raw/master/img/image-20241216201615254-2025-3-1016:10:00.png)
 
 启动两端口的服务，使用同一个用户下两次单，在锁内部打上断点，debug结果如下：同一个用户在不同端口的服务上都成功获取到了锁，都可以进行下单操作。
 
@@ -2326,7 +2349,7 @@ public  Result createVoucherOrder(Long voucherId) {
 
 Redisson是一个高级的分布式协调Redis客户端，与Jedis、Lettuce等Redis客户端相比，Redisson的API更侧重于**分布式开发**，提供了多种分布式Java对象和服务，如**分布式锁**、分布式集合、分布式对象、分布式限流器等‌。
 
-![image-20241217170920486](C:%5CUsers%5C86152%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20241217170920486.png)
+![](https://gitee.com/cmyk359/img/raw/master/img/image-20241217170920486-2025-3-1011:27:40.png)
 
 参考文档：
 
@@ -3937,7 +3960,8 @@ public void loadShop2GEO() {
     //1、获取所有店铺
     List<Shop> shops = shopService.list();
     //2、根据typeID分组,typeId一致的放到一个集合
-    Map<Long, List<Shop>> collect = shops.stream().collect(Collectors.
+    Map<Long, List<Shop>> collect = shops.stream().collect(Collectors.groupingBy(Shop::getTypeId));
+
     //3、分批写入Redis
     for (Map.Entry<Long, List<Shop>> entry : collect.entrySet()) {
         //3.1 获取类型id
@@ -3945,17 +3969,18 @@ public void loadShop2GEO() {
         String key = SHOP_GEO_KEY + typeId;
         //3.2 获取对应店铺集合
         List<Shop> shopList = entry.getValue();
-        List<RedisGeoCommands.GeoLocation<String>> locations = new Arr
+        List<RedisGeoCommands.GeoLocation<String>> locations = new ArrayList<>(shopList.size());
         //3.3将各个店铺的经纬度封装在一个GEOLocation中，一次完成所有写入
         for (Shop shop : shopList) {
             locations.add(new RedisGeoCommands.GeoLocation<>(
-                    shop.getId().toString(),
-                    new Point(shop.getX(), shop.getY())
+                shop.getId().toString(),
+                new Point(shop.getX(), shop.getY())
             ));
         }
         //3.4、写入Redis  GEOADD key 经度 纬度 member
         stringRedisTemplate.opsForGeo().add(key ,locations);
     }
+
 }
 ```
 

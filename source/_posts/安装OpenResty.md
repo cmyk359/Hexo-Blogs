@@ -3,8 +3,6 @@ title: 安装OpenResty
 archive: true
 abbrlink: 50a9e6bc
 hide: true
-categories:
-  - 环境搭建教程
 date: 2024-12-26 21:56:12
 tags:
 ---

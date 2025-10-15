@@ -623,6 +623,186 @@ public class ResponseController {
 
 
 
+### 3.3、Swagger
+[Swagger](https://swagger.io/) 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。 它的主要作用是：
+
+1. 使得前后端分离开发更加方便，有利于团队协作
+
+2. 接口的文档在线自动生成，降低后端开发人员编写接口文档的负担
+
+3. 功能测试 
+
+   Spring已经将Swagger纳入自身的标准，建立了Spring-swagger项目，现在叫Springfox。通过在项目中引入Springfox ，即可非常简单快捷的使用Swagger。
+
+knife4j是为Java MVC框架集成Swagger生成Api文档的增强解决方案,前身是swagger-bootstrap-ui,取名kni4j是希望它能像一把匕首一样小巧,轻量,并且功能强悍!
+
+目前，一般都使用knife4j框架。
+
+> Swagger和Yapi
+
+1、Yapi 是设计阶段使用的工具，管理和维护接口。[参考](https://catpaws.top/4b1cca40/#%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86-yapi)
+
+2、Swagger 在开发阶段使用的框架，帮助后端开发人员做后端的接口测试
+
+#### 使用步骤
+
+1. 导入 knife4j 的maven坐标
+
+   在pom.xml中添加依赖
+
+   ```xml
+   <dependency>
+      <groupId>com.github.xiaoymin</groupId>
+      <artifactId>knife4j-spring-boot-starter</artifactId>
+   </dependency>
+   ```
+
+2. 在配置类中加入 knife4j 相关配置
+
+   WebMvcConfiguration.java
+
+   ```java
+   /**
+        * 通过knife4j生成接口文档
+        * @return
+   */
+       @Bean
+       public Docket docket() {
+           ApiInfo apiInfo = new ApiInfoBuilder()
+                   .title("苍穹外卖项目接口文档")
+                   .version("2.0")
+                   .description("苍穹外卖项目接口文档")
+                   .build();
+           Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                   .apiInfo(apiInfo)
+                   .select()
+                   .apis(RequestHandlerSelectors.basePackage("com.sky.controller"))
+                   .paths(PathSelectors.any())
+                   .build();
+           return docket;
+       }
+   ```
+
+   
+
+3. 设置静态资源映射，否则接口文档页面无法访问
+
+   WebMvcConfiguration.java
+
+   ```java
+   /**
+        * 设置静态资源映射
+        * @param registry
+   */
+   protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+           registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
+           registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+   }
+   ```
+
+4. 访问测试
+
+   接口文档访问路径为 http://ip:port/doc.html ---> http://localhost:8080/doc.html
+
+   ![image-20240510195425057](https://gitee.com/cmyk359/img/raw/master/img/image-20240510195425057-2024-5-1019:54:39.png)
+
+   接口测试：测试登录功能
+
+   ![image-20240510195519419](https://gitee.com/cmyk359/img/raw/master/img/image-20240510195519419-2024-5-1019:55:20.png)
+
+#### 常用注解
+
+通过注解可以控制生成的接口文档，使接口文档拥有更好的可读性，常用注解如下：
+
+| **注解**          | **说明**                                 | 使用                        |
+| ----------------- | :--------------------------------------- | --------------------------- |
+| @Api              | 用在类上，例如Controller，表示对类的说明 | @Api(tags = "" )            |
+| @ApiModel         | 用在类上，例如entity、DTO、VO            | @ApiModel(description = "") |
+| @ApiModelProperty | 用在属性上，描述属性信息                 | @ApiModelProperty("")       |
+| @ApiOperation     | 用在方法上，说明方法的用途、作用         | @ApiOperation(value = "")   |
+
+使用上述注解，生成可读性更好的接口文档
+
+EmployeeLoginDTO.java
+
+```java
+@Data
+@ApiModel(description = "员工登录时传递的数据模型")
+public class EmployeeLoginDTO implements Serializable {
+
+    @ApiModelProperty("用户名")
+    private String username;
+
+    @ApiModelProperty("密码")
+    private String password;
+
+}
+```
+
+EmployeeLoginVo.java
+
+```java
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ApiModel(description = "员工登录返回的数据格式")
+public class EmployeeLoginVO implements Serializable {
+
+    @ApiModelProperty("主键值")
+    private Long id;
+
+    @ApiModelProperty("用户名")
+    private String userName;
+
+    @ApiModelProperty("姓名")
+    private String name;
+
+    @ApiModelProperty("jwt令牌")
+    private String token;
+
+}
+```
+
+EmployeeController.java
+
+```java
+/**
+ * 员工管理
+ */
+@RestController
+@RequestMapping("/admin/employee")
+@Slf4j
+@Api(tags = "员工相关接口")
+public class EmployeeController {
+
+    @Autowired
+    private EmployeeService employeeService;
+    @Autowired
+    private JwtProperties jwtProperties;
+
+    @PostMapping("/login")
+    @ApiOperation(value = "员工登录")
+    public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) 	{
+        //..............
+
+        
+    }
+
+    @PostMapping("/logout")
+    @ApiOperation("员工退出")
+    public Result<String> logout() {
+        return Result.success();
+    }
+
+}
+
+```
+
+启动服务：访问http://localhost:8080/doc.html
+
+<img src="https://gitee.com/cmyk359/img/raw/master/img/image-20221107175649468-2025-2-1116:13:10.png" alt="image-20221107175649468" style="zoom:50%;" />
+
 ## 四、分层解耦
 
 ### 4.1、三层架构
@@ -665,9 +845,13 @@ Springboot中通过`注解`将类交给IOC容器，在运行时创建对象。
 - `@Qualifier（"bean的名称"）+ @Autowired`，两个注解配合使用，指定要注入bean的名称（创建时没有指定时，默认为类名首字母小写）
 - `@Resource（name-"bean的名称"`，@Resource是JDK的注解，默认你按照名称注入
 
-## 五、[MySQL](https://catpaws.top/8d742da7/)
+## 五、MySQL
 
-## 六、[MyBatis](web-02-Mybatis.md)
+[MySQL 参考文章](https://catpaws.top/8d742da7/)
+
+## 六、MyBatis
+
+[MyBatis 参考文章](web-02-Mybatis.md)
 
 ### 6.1、快速入门
 
@@ -2101,7 +2285,7 @@ public class GlobalExceptionHandler {
 注解作用在方法上，将当前方法交给Spring进行事务管理
 
 ```java
-@Transactional方法
+@Transactional
 @override public void delete(Integer id){
 	//1.删除部门
 	deptMapper.delete(id);
@@ -2564,8 +2748,6 @@ public void before() {
 
 ### 10.1、配置优先级
 
-
-
 **优先级：低→高**
 
 - application.yaml（忽略）
@@ -2650,9 +2832,11 @@ Spring支持五种作用域，后三种在web环境才生效：
 
 ![image-20241209210632428](https://gitee.com/cmyk359/img/raw/master/img/image-20241209210632428-2024-12-921:06:40.png)
 
+Spring 中的 Bean 默认都是单例的。
 
+每个Bean的实例只会被创建一次，并且会被存储在Spring容器的缓存中，以便在后续的请求中重复使用。这种单例模式可以提高应用程序的性能和内存效率。
 
-可以通过`@Scope`注解来进行配置作用域：
+Spring也支持将Bean设置为多例模式，即**每次请求都会创建一个新的Bean实例**。要将Bean设置为多例模式，可以在Bean定义中通过设置scope属性为"prototype"来实现：
 
 ```java
 @Scope("prototype") //通过@Scope注解来进行配置作用域
@@ -2664,16 +2848,44 @@ public class DeptController f
 
 
 
-> 注意：
->
-> i. 默认singleton的bean，在容器启动时被创建，可以使用@Lazy注解来延迟初始化（延迟到第一次使用时）。
-> ii. prototype的bean，每一次使用该bean的时候都会创建一个新的实例。
->
-> iii. 实际开发当中，绝大部分的Bean是单例的，也就是说绝大部分Bean不需要配置scope属性。
+{% note info%}
 
+Spring 中的单例bean是线程安全的吗？
 
+当多⽤⼾同时请求⼀个服务时，容器会给每个请求分配⼀个线程，这些线程会并发执⾏业务逻辑。如果处理逻辑中包含对单例状态的修改，⽐如修改单例的成员属性，就必须考虑线程安全问题。Spring框架本⾝并不对单例bean进⾏线程安全封装，线程安全和并发问题需要开发者⾃⾏处理。
 
+通常在项⽬中使⽤的Spring bean是不可变状态（如Service类和DAO类），因此在某种程度上可以说Spring的单例bean是线程安全的。如果bean有多种状态（如ViewModel对象），就需要⾃⾏保证线程安全。解决办法是将单例bean的作⽤域由“singleton”变更为“prototype”，或加锁。
 
+{% endnote%}
+
+#### Bean的生命周期
+
+![](https://gitee.com/cmyk359/img/raw/master/img/image-20250314102204652-2025-5-810:09:55.png)
+
+1. Spring启动，查找并加载需要被Spring管理的bean，通过 `BeanDefinition` 获取bean的定义信息。
+2. 调⽤构造函数实例化bean。
+3. 进⾏bean的依赖注⼊，例如通过set⽅法或 @Autowired 注解进行依赖注入
+4. 处理实现了 Aware 接⼝的bean。(具体记不住也没事)
+   - 如果Bean实现了<u>BeanNameAware</u>接口的话，Spring将Bean的Id传递给setBeanName()方法
+   - 如果Bean实现了<u>BeanFactoryAware</u>接口的话，Spring将BeanFactory容器实例传递给setBeanFactory()方法
+   - 如果Bean实现了<u>ApplicationContextAware</u>接口的话，Spring将bean所在应用上下文引用传递给setApplicationContext()方法。
+5. 执⾏ BeanPostProcessor 的前置处理器。
+6. 调⽤初始化⽅法，如实现了 `InitializingBean` 接⼝或⾃定义的 `init-method `。
+7. 执⾏ BeanPostProcessor 的后置处理器，可能在这⾥产⽣AOP代理对象，用于增强备案。
+8. 此时，Bean已经准备就绪，可以被应用程序使用了。他们将一直驻留在应用上下文中，直到应用上下文被销毁。
+
+{% note info%}
+
+Bean的单例和非单例，生命周期是否一样？
+
+不一样的，Spring Bean 的生命周期完全由 IOC 容器控制。Spring 只帮我们管理单例模式 Bean 的完整生命周期，对于 `prototype` 的 Bean，Spring 在创建好交给使用者之后，则不会再管理后续的生命周期，需手动管理资源释放。
+
+主要区别在于：
+
+- 单例在容器启动时创建；非单例在每次请求时创建新实例，完整执行生命周期流程。
+- 单例在容器关闭时销毁；非单例下，**容器不管理销毁**，需由调用者自行释放资源
+
+{% endnote%}
 
 #### 第三方bean
 
@@ -2748,27 +2960,13 @@ class SpringbootWebConfig2ApplicationTests {
 
 
 
-### 10.3、springboot原理
-
-![image-20240509095011100](https://gitee.com/cmyk359/img/raw/master/img/image-20240509095011100-2024-5-909:50:46.png)
-
-#### 起步依赖
-
-SpringBoot官方的起步依赖都遵循一样的命名规范，都以`spring-boot-starter-`开头
-
-原理：起步依赖背后使用的其实就是`Maven的传递依赖机制`。假设B依赖于C，而A又依赖于B，那么A无需明确声明对C的依赖，而是通过B依赖于C。因此看似只添加了一个依赖，但实际上通过传递依赖，我们已经引入了一堆的依赖。
-
-
-
-#### 自动配置
-
-##### 概述
+### 10.3、自动配置原理
 
 SpringBoot的自动配置就是当spring容器启动后，一些配置类、bean对象就自动存入到了IOC容器中，不需要我们手动去声明，从而简化了开发，省去了繁琐的配置操作。
 
 ![image-20230114205745221](https://gitee.com/cmyk359/img/raw/master/img/image-20230114205745221-2024-5-912:20:02.png)
 
-##### 常见方案
+#### 常见方案
 
 > 方案一：@ComponentScan 组件扫描
 
@@ -2897,111 +3095,92 @@ public class SpringbootWebConfig2Application {
 
   
 
-##### 原理分析
-
-######  源码跟踪
-
-通过源码跟踪的形式来剖析下SpringBoot底层到底是如何完成自动配置的。
+#### 原理分析
 
 要搞清楚SpringBoot的自动配置原理，要从SpringBoot启动类上使用的核心注解`@SpringBootApplication`开始分析：
 
-![image-20230115001439110](https://gitee.com/cmyk359/img/raw/master/img/image-20230115001439110-2024-5-911:55:46.png)
-
-
+![](https://gitee.com/cmyk359/img/raw/master/img/image-20230115001439110-2024-5-911:55:46.png)
 
 在@SpringBootApplication注解中包含了：
 
 - 元注解
 - @SpringBootConfiguration
-- @EnableAutoConfiguration
+- @EnableAutoConfiguration（**自动配置核心注解**）
 - @ComponentScan
 
-
+***
 
 我们先来看第一个注解：@SpringBootConfiguration
 
-![image-20230115001950076](https://gitee.com/cmyk359/img/raw/master/img/image-20230115001950076-2024-5-911:53:46.png)
+![](https://gitee.com/cmyk359/img/raw/master/img/image-20230115001950076-2024-5-911:53:46.png)
 
-> @SpringBootConfiguration注解中使用了@Configuration，表明SpringBoot启动类就是一个配置类。
->
-> @Indexed注解，是用来加速应用启动的（不用关心）。
+@SpringBootConfiguration注解中使用了@Configuration，表明SpringBoot启动类就是一个配置类。@Indexed注解，是用来加速应用启动的（不用关心）。
 
-
+***
 
 接下来再先看@ComponentScan注解：
 
-![image-20230115002450993](https://gitee.com/cmyk359/img/raw/master/img/image-20230115002450993-2024-5-911:54:46.png)
+![](https://gitee.com/cmyk359/img/raw/master/img/image-20230115002450993-2024-5-911:54:46.png)
 
-> @ComponentScan注解是用来进行组件扫描的，扫描启动类所在的包及其子包下所有被@Component及其衍生注解声明的类。
->
-> SpringBoot启动类，之所以具备扫描包功能，就是因为包含了@ComponentScan注解。
+@ComponentScan注解是用来进行组件扫描的，扫描启动类所在的包及其子包下所有被@Component及其衍生注解声明的类。
 
+SpringBoot启动类，之所以具备扫描包功能，就是因为包含了@ComponentScan注解。
 
+***
 
-最后我们来看看@EnableAutoConfiguration注解（自动配置核心注解）：
+最后我们来看看@EnableAutoConfiguration注解（**自动配置核心注解**）：
 
-![image-20230115002743115](https://gitee.com/cmyk359/img/raw/master/img/image-20230115002743115-2024-5-911:50:46.png)
+![](https://gitee.com/cmyk359/img/raw/master/img/image-20230115002743115-2024-5-911:50:46.png)
 
-
-
-> 使用@Import注解，导入了实现ImportSelector接口的实现类。
->
-> AutoConfigurationImportSelector类是ImportSelector接口的实现类。
->
-> ![image-20230115003242549](https://gitee.com/cmyk359/img/raw/master/img/image-20230115003242549-2024-5-911:51:46.png)
+使用@Import注解，导入了实现ImportSelector接口的实现类AutoConfigurationImportSelector。
 
 AutoConfigurationImportSelector类中重写了ImportSelector接口的`selectImports()`方法：
 
 ![image-20230115003348288](https://gitee.com/cmyk359/img/raw/master/img/image-20230115003348288-2024-5-911:58:46.png)
 
-> selectImports()方法底层调用getAutoConfigurationEntry()方法，获取可自动配置的配置类信息集合
+selectImports()方法底层调用getAutoConfigurationEntry()方法，获取可自动配置的配置类信息集合
 
 ![image-20230115003704385](https://gitee.com/cmyk359/img/raw/master/img/image-20230115003704385-2024-5-912:06:46.png)
 
-> getAutoConfigurationEntry()方法通过调用getCandidateConfigurations(annotationMetadata, attributes)方法获取在配置文件中配置的所有自动配置类的集合
+在方法内部调用getCandidateConfigurations方法获取配置文件中所有的自动配置类。
 
-![image-20230115003903302](https://gitee.com/cmyk359/img/raw/master/img/image-20230115003903302-2024-5-911:52:46.png)
+getCandidateConfigurations方法的功能，获取所有基于以下两个文件中的配置类集合
 
-> getCandidateConfigurations方法的功能：
->
-> 获取所有基于META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports文件、META-INF/spring.factories文件中配置类的集合
+- META-INF/spring.factories
+- META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
 
-
-
-META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports文件和META-INF/spring.factories文件这两个文件在哪里呢？
-
-- 通常在引入的起步依赖中，都有包含以上两个文件
-
-![image-20230129090835964](https://gitee.com/cmyk359/img/raw/master/img/image-20230129090835964-2024-5-912:03:46.png) 
-
-![image-20230115064329460](https://gitee.com/cmyk359/img/raw/master/img/image-20230115064329460-2024-5-911:56:46.png)
+![](https://gitee.com/cmyk359/img/raw/master/img/image-20230115003903302-2024-5-911:52:46.png)
 
 
 
+那这两个文件在哪里呢？通常在引入的起步依赖中，都有包含以上两个文件
+
+![](https://gitee.com/cmyk359/img/raw/master/img/image-20230129090835964-2024-5-912:03:46.png) 
+
+![](https://gitee.com/cmyk359/img/raw/master/img/image-20230115064329460-2024-5-911:56:46.png)
 
 
-**自动配置源码小结**
+
+***
+
+**自动配置原理小结**
 
 自动配置原理源码入口就是@SpringBootApplication注解，在这个注解中封装了3个注解，分别是：
 
-- @SpringBootConfiguration
-  - 声明当前类是一个配置类
-- @ComponentScan
-  - 进行组件扫描（SpringBoot中默认扫描的是启动类所在的当前包及其子包）
+- @SpringBootConfiguration  声明当前类是一个配置类
+- @ComponentScan 进行组件扫描（SpringBoot中默认扫描的是启动类所在的当前包及其子包）
 - @EnableAutoConfiguration
-  - 封装了@Import注解（Import注解中指定了一个ImportSelector接口的实现类）
-    - 在实现类重写的selectImports()方法，读取当前项目下所有依赖jar包中*META-INF/spring.factories*、*META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports*两个文件里面定义的配置类（配置类中定义了@Bean注解标识的方法）。根据`特定条件`决定可以导入哪些配置类，接口中的selectImports()方法返回的就是可以导入的配置类名。
 
-> 从Spring Boot 2.7开始，AutoConfigurationImportSelector不再从/META-INF/spring.factories加载自动配置类，而是开始使用新的/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports文件，直接在里面添加自动配置类的全限定类名即可。
->
+其中@EnableAutoConfiguration是实现自动化配置的核心注解。该注解通过@lmport注解导入对应的配置选择器，在Import注解中指定了一个ImportSelector接口的实现类，在实现类中重写了selectImports()方法，读取当前项目下所有依赖jar包中 以下两个文件里面所配置的类的全类名
 
-当SpringBoot程序启动时，就会加载配置文件当中所定义的配置类，并将这些配置类信息(类的全限定名)封装到String类型的数组中，最终通过@Import注解将这些配置类全部加载到Spring的IOC容器中，交给IOC容器管理。
+- META-INF/spring.factories
+- META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
 
-但是在两个文件中定义的配置类非常多，而且每个配置类中又可以定义很多的bean，这些bean并不会都注册到Spring的IOC容器中。 在声明bean对象时，上面有加一个以`@Conditional开头`的注解，这种注解的作用就是按照条件进行装配，只有满足条件之后，才会将bean注册到Spring的IOC容器中（下面会详细来讲解）
+在这些配置类中所定义的Bean会根据**条件注解**所指定的条件来决定是否需要将其导入到Spring容器中。
 
 
 
-###### @Conditional
+@Conditional
 
 - 作用：按照一定的条件进行判断，在满足给定条件后才会注册对应的bean对象到Spring IOC容器中。
 - 位置：方法、类
@@ -3013,6 +3192,10 @@ META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
 ![image-20240509121245446](https://gitee.com/cmyk359/img/raw/master/img/image-20240509121245446-2024-5-912:12:46.png)
 
 #### 案例：自定义Starter
+
+SpringBoot官方的起步依赖都遵循一样的命名规范，都以`spring-boot-starter-`开头
+
+原理：起步依赖背后使用的其实就是`Maven的传递依赖机制`。假设B依赖于C，而A又依赖于B，那么A无需明确声明对C的依赖，而是通过B依赖于C。因此看似只添加了一个依赖，但实际上通过传递依赖，我们已经引入了一堆的依赖。
 
 场景：在实际开发中，经常会定义一些公共组件，提供给各个项目团队使用。而在SpringBoot的项目中，一般会将这些公共组件封装为SpringBoot 的 starter。
 
@@ -3027,8 +3210,6 @@ META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
 > SpringBoot官方starter命名： spring-boot-starter-xxxx
 >
 > 第三组织提供的starter命名：  xxxx-spring-boot-starter
-
-
 
 
 
@@ -3260,13 +3441,13 @@ META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
 
 
 
-## 1.12、后端开发总结
+## 十一、后端开发总结
 
 
 
 到此基于SpringBoot进行web后端开发的相关知识我们已经学习完毕了。下面我们一起针对这段web课程做一个总结。
 
-我们来回顾一下关于web后端开发，我们都学习了哪些内容，以及每一块知识，具体是属于哪个框架的。
+现在来回顾一下关于web后端开发，都学习了哪些内容，以及每一块知识，具体是属于哪个框架的。
 
 web后端开发现在基本上都是基于标准的三层架构进行开发的，在三层架构当中，Controller控制器层负责接收请求响应数据，Service业务层负责具体的业务逻辑处理，而Dao数据访问层也叫持久层，就是用来处理数据访问操作的，来完成数据库当中数据的增删改查操作。
 
@@ -3322,13 +3503,11 @@ web后端开发现在基本上都是基于标准的三层架构进行开发的�
 
 基于传统的SSM框架进行整合开发项目会比较繁琐，而且效率也比较低，所以在现在的企业项目开发当中，基本上都是直接基于SpringBoot整合SSM进行项目开发的。
 
-到此我们web后端开发的内容就已经全部讲解结束了。
 
 
+## 十二、Maven高级
 
-## 十一、Maven高级
-
-## 11.1、分模块开发与设计
+### 11.1、分模块开发与设计
 
 ​	对于开发一个大型的电商项目，里面可能就包括了商品模块的功能、搜索模块的功能、购物车模块、订单模块、用户中心等等。如果这些所有的业务代码我们都在一个 Java 项目当中编写，项目管理和维护起来将会非常的困难。而且对一些通用的工具类以及通用的组件，难以共享复用。
 
@@ -3354,9 +3533,9 @@ web后端开发现在基本上都是基于标准的三层架构进行开发的�
 
 ![image-20240509214402937](https://gitee.com/cmyk359/img/raw/master/img/image-20240509214402937-2024-5-921:44:03.png)
 
-##  11.2、继承与聚合
+###  11.2、继承与聚合
 
-### 继承
+#### 继承
 
 在案例项目分模块开发之后，在lias-pojo、tlias-utils、tlias-web-management中都引入了一个依赖 lombok 的依赖。我们在三个模块中分别配置了一次。
 
@@ -3366,7 +3545,7 @@ web后端开发现在基本上都是基于标准的三层架构进行开发的�
 
 ![image-20240509225135625](https://gitee.com/cmyk359/img/raw/master/img/image-20240509225135625-2024-5-922:51:46.png)
 
-#### 继承关系实现
+##### 继承关系实现
 
 在Maven中是持多重继承的。让自己创建的三个模块，都继承tlias-parent，而tlias-parent 再继承 spring-boot-starter-parent。
 
@@ -3394,7 +3573,7 @@ web后端开发现在基本上都是基于标准的三层架构进行开发的�
 
 
 
-#### 版本锁定
+##### 版本锁定
 
 在父工程中集中管理一些依赖的版本，在子工程中，直接使用该依赖而不再需要指定属性。当版本需要变更时，只需修改父工程中设定的版本号即可，不用去修改每个子工程中的版本号。
 
@@ -3472,13 +3651,13 @@ web后端开发现在基本上都是基于标准的三层架构进行开发的�
 
 ![image-20240509233741269](https://gitee.com/cmyk359/img/raw/master/img/image-20240509233741269-2024-5-923:38:46.png)
 
-### 聚合
+#### 聚合
 
 项目分模块开发后，最后打包上线，需要让<u>每个模块</u>都执行maven的`package`生命周期，安装到本地仓库，才能实现成功打包，若仓库中缺失某个模块打包后的jar包，最终项目就会打包失败。
 
 如果开发一个大型项目，拆分的模块很多，模块之间的依赖关系错综复杂，那此时要进行项目的打包、安装操作，是非常繁琐的。maven的聚合就是来解决这个问题的，通过maven的聚合就可以轻松实现项目的一键构建（清理、编译、测试、打包、安装等）。
 
-#### 介绍
+##### 介绍
 
  <img src="https://gitee.com/cmyk359/img/raw/master/img/image-20230113151533948-2024-5-923:53:24.png" alt="image-20230113151533948" style="zoom:80%;" />
 
@@ -3486,7 +3665,7 @@ web后端开发现在基本上都是基于标准的三层架构进行开发的�
 - **聚合工程：**一个不具有业务功能的“空”工程（有且仅有一个pom文件） 【PS：一般来说，继承关系中的父工程与聚合关系中的聚合工程是同一个】
 - **作用：**快速构建项目（无需根据依赖关系手动构建，直接在聚合工程上构建即可）
 
-#### 实现
+##### 实现
 
 在maven中，我们可以在聚合工程中通过 `<moudules>` 设置当前聚合工程所包含的子模块的名称。
 
@@ -3505,19 +3684,19 @@ web后端开发现在基本上都是基于标准的三层架构进行开发的�
 
 此时要进行编译、打包、安装操作，就无需在每一个模块上操作了。只需要在聚合工程上，统一进行操作就可以了。
 
-### 继承与聚合对比
+#### 继承与聚合对比
 
 ![image-20240509235806269](https://gitee.com/cmyk359/img/raw/master/img/image-20240509235806269-2024-5-923:58:07.png)
 
-## 11.3、私服
+### 11.3、私服
 
-### 介绍
+#### 介绍
 
 ![image-20240510000150698](https://gitee.com/cmyk359/img/raw/master/img/image-20240510000150698-2024-5-1000:02:46.png)
 
-### 资源的上传和下载
+#### 资源的上传和下载
 
-#### 步骤分析
+##### 步骤分析
 
 资源上传与下载，我们需要做三步配置，执行一条指令。
 
@@ -3548,7 +3727,7 @@ web后端开发现在基本上都是基于标准的三层架构进行开发的�
 
 
 
-#### 具体操作
+##### 具体操作
 
 [b站课程](https://www.bilibili.com/video/BV1m84y1w7Tb?p=199&spm_id_from=pageDriver&vd_source=51d78ede0a0127d1839d6abf9204d1ee)
 
@@ -3629,3 +3808,4 @@ web后端开发现在基本上都是基于标准的三层架构进行开发的�
 
 5. 发布项目，直接运行 deploy 生命周期即可 (发布时，建议跳过单元测试)
 
+十三、Swagger

@@ -1,7 +1,7 @@
 ---
 title: JVM学习
 categories:
-  - Java
+  - JavaSE
 abbrlink: f0242a65
 date: 2025-01-16 22:08:22
 tags:
@@ -13,7 +13,7 @@ tags:
 
 JVM，即`Java Virtual Machine`，是java程序的运行环境（java<u>二进制字节码</u>的运行环境）。Java虚拟机负责装载字节码到其内部，解释/编译为对应平台上的机器码指令执行
 
-![image-20250110105402958](https://gitee.com/cmyk359/img/raw/master/img/image-20250110105402958-2025-1-1116:57:19.png)
+<img src="https://gitee.com/cmyk359/img/raw/master/img/image-20250110105402958-2025-1-1116:57:19.png" style="zoom:80%;" />
 
 ### 1.1、JVM的特点
 
@@ -1240,6 +1240,13 @@ public class HelloWorld {
 }
 ```
 
+> 反编译获取Class文件内容:
+>
+> - `javac -g xxx.java`
+> - `javap -v xxx.class >xxx.txt`，将其写入txt文件查看
+
+
+
 <img src="https://gitee.com/cmyk359/img/raw/master/img/image-20250119111901788-2025-1-1911:21:44.png" style=" width: 80%;height: auto;">
 
 #### 魔数
@@ -1262,7 +1269,7 @@ public class HelloWorld {
 
 #### 常量池
 
-第8、9字节为`constant_pool_count`，即常量池长度。constant_pool 是一种表结构以 1 ~ constant_pool_count - 1 为索引，表明有多少个常量池表项。案例中第8、9字节为`0x001F`（31），表示常量池有#1~#30项，注意#0 项不计入，也没有值。
+第8、9字节为`constant_pool_count`，即常量池长度。constant_pool 是一种表结构,以 1 ~ constant_pool_count - 1 为索引，表明有多少个常量池表项。案例中第8、9字节为`0x001F`（31），表示常量池有#1~#30项，注意#0 项不计入，也没有值。
 
 表项中存放编译时期生成的各种字面量和符号引用，这部分内容将在类加载后进入方法区的运行时常量池
 
@@ -1327,7 +1334,7 @@ public class HelloWorld {
 
 ![](https://gitee.com/cmyk359/img/raw/master/img/image-20250119182107640-2025-1-1918:21:10.png)
 
-访问标识符是通过位操作来组合的。例如，如果一个类既是 public 的又是 final 的，那么它的访问标识符将是 ACC_PUBLIC（0x0001）和 ACC_FINAL（0x0010）的并集，即 0x0011。
+访问标识符是通过**位操作**来组合的。例如，如果一个类既是 public 的又是 final 的，那么它的访问标识符将是 ACC_PUBLIC（0x0001）和 ACC_FINAL（0x0010）的并集，即 0x0011。
 
 在案例中，该类的访问修饰符为`0x0021` = `0x0020` + `0x0001`，代表 ACC_PUBLIC 和 ACC_SUPER
 
@@ -1354,18 +1361,224 @@ public class HelloWorld {
 
 <img src="https://gitee.com/cmyk359/img/raw/master/img/image-20250119184458104-2025-1-1918:45:06.png" style="zoom:80%;" />
 
-#### 字段表集合
+#### 字段表
 
 ​	字段 fields 用于描述接口或类中声明的变量，包括类变量以及实例变量，但不包括方法内部、代码块内部声明的局部变量（local variables）以及从父类或父接口继承。字段叫什么名字、被定义为什么数据类型，都是无法固定的，只能引用常量池中的常量来描述。
 
-- `fields_count`（字段计数器）：表示当前 class 文件 fields 表的成员个数，用两个字节来表示
+`fields_count`（字段计数器）：表示当前 class 文件 fields 表的成员个数，用两个字节来表示
 
-  本案例中，`0x0000`表示当前 class 文件没有字段
+本案例中，`0x0000`表示当前 class 文件没有字段
 
-  <img src="https://gitee.com/cmyk359/img/raw/master/img/image-20250119185852407-2025-1-1918:58:53.png" style="zoom:67%;" />
+<img src="https://gitee.com/cmyk359/img/raw/master/img/image-20250119185852407-2025-1-1918:58:53.png" style="zoom:67%;" />
 
-- `fields[]`（字段表）: fields表中的每个成员都是一个 `fields_info `结构的数据项，用于表示当前类或接口中某个字段的完整描述
+`fields[]`（字段表）: fields表中的每个成员都是一个 `fields_info `结构的数据项，用于表示当前类或接口中某个字段的完整描述
+字段表结构如下：
 
-#### 方法表集合
+| 类型           | 名称             | 含义       | 数量             |
+| -------------- | ---------------- | ---------- | ---------------- |
+| u2             | access_flags     | 访问标志   | 1                |
+| u2             | name_index       | 字段名索引 | 1                |
+| u2             | descriptor_index | 描述符索引 | 1                |
+| u2             | attributes_count | 属性计数器 | 1                |
+| attribute_info | attributes       | 属性集合   | attributes_count |
 
-#### 属性表集合
+  - `access_flags`：访问标志，可以设置的标志位和含义如下：
+
+| 标志名称      | 标志值 | 含义                       |
+| ------------- | ------ | -------------------------- |
+| ACC_PUBLIC    | 0x0001 | 字段是否为public           |
+| ACC_PRIVATE   | 0x0002 | 字段是否为private          |
+| ACC_PROTECTED | 0x0004 | 字段是否为protected        |
+| ACC_STATIC    | 0x0008 | 字段是否为static           |
+| ACC_FINAL     | 0x0010 | 字段是否为final            |
+| ACC_VOLATILE  | 0x0040 | 字段是否为volatile         |
+| ACC_TRANSTENT | 0x0080 | 字段是否为transient        |
+| ACC_SYNCHETIC | 0x1000 | 字段是否为由编译器自动产生 |
+| ACC_ENUM      | 0x4000 | 字段是否为enum             |
+
+  - `name_index`：常量池索引，代表字段的**简单名称**
+	
+  - `descriptor_index`：字段的描述符
+
+字段表所包含的固定数据项目到`descriptor_index`就结束了，但在其之后还跟着一个**属性表集合**，用于存储一些额外信息。具体见[属性表集合](https://catpaws.top/f0242a65/属性表集合)
+
+  - `attributes_count`：属性计数器
+  - `attributes`：属性集合
+
+> 区分："简单名称"、"全限定名" 和 "描述符"
+>
+> **简单名称**，指没有类型和参数修饰的方法或字段名称，如一个类中有 inc()方法和 m字段，则它们的简单名称就是 `inc`和`m`。
+>
+> **全限定名**，如：org/fenixsoft/clazz/TestClass，只是将全类名中的`.`替换成了`/`而已。为了使多个全限定名质检部产生混淆，在使用时最后一般会加上一个`;`表示全限定名的结束。
+>
+> **描述符**，用来描述字段的数据类型、方法的参数列表（包括数量、类型以及顺序）和返回值，更复杂一点。根据描述符规则，基本数据类型（byte、char、double、float、int、long、short、boolean）以及代表无返回值的void类型都用一个大写字母表示，而对象类型则用字符`L`加对象的全限定名表示。
+>
+> | 标识字符 | 含义                           |
+> | -------- | ------------------------------ |
+> | B        | 基本类型 byte                  |
+> | C        | 基本类型 char                  |
+> | D        | 基本类型 double                |
+> | F        | 基本类型 float                 |
+> | I        | 基本类型 int                   |
+> | J        | 基本类型 long                  |
+> | S        | 基本类型 short                 |
+> | Z        | 基本类型 boolean               |
+> | V        | 特殊类型 void                  |
+> | L        | 对象类型，如Ljava/long/Object; |
+>
+> 对于数组类型，每一维度使用一个前置的`[`字符来描述，如定义为"java.lang.String\[]\[]"类型的二维数组被记录成"[[Ljava/lang/String;"，一个整型数组“int[]”将被记录成"[I"。
+>
+> 用描述符描述方法时，按照**先参数列表，后返回值**的顺序描述，参数列表按照参数的严格顺序放在一组小括号`()`内。
+>
+> - 如，方法 void inc()的描述符为`()V`
+> - 如，方法java.lang.String.toString()的描述符为`()Ljava/lang/String`
+> - 如，方法int indexOf(char[] source, int sourceOffset, int sourceCount, char[] target, int targetOffset, ,int targetCount, int fromIndex)的描述符为`([CII[CIII)I`
+
+#### 方法表
+
+**方法表集合（method_info 表）**，用于描述类或接口中定义的所有方法。其中每一个 method_info 项都对应着一个类或者接口中的方法信息，完整描述了每个方法的签名。
+
+类文件中的方法表集合位于字段表集合之后，结构如下：
+
+```plaintext
+methods_count         | 2字节，表示方法的数量
+method_info[methods_count] | 每个方法对应一个 method_info 结构
+```
+
+method_info 结构如下：
+
+| 类型           | 名称             | 含义       | 数量             |
+| -------------- | ---------------- | ---------- | ---------------- |
+| u2             | access_flags     | 访问标志   | 1                |
+| u2             | name_index       | 方法名索引 | 1                |
+| u2             | descriptor_index | 描述符索引 | 1                |
+| u2             | attrubutes_count | 属性计数器 | 1                |
+| attribute_info | attributes       | 属性集合   | attributes_count |
+
+**(1) 访问标志（access_flags）**
+
+**2字节**，表示方法的修饰符，通过位掩码组合。对于方法表，所有标志位及其取值如下：
+
+![](https://gitee.com/cmyk359/img/raw/master/img/685402-20230815184118464-371048288-2025-2-314:08:04.png)
+
+------
+
+**(2) 方法名索引（name_index）**
+
+- **2字节**，指向常量池的某项，表示方法名。
+- **特殊方法名**：
+  - `<init>`：构造方法。
+  - `<clinit>`：类/接口初始化方法（静态代码块）。
+
+------
+
+**(3) 描述符索引（descriptor_index）**
+
+- **2字节**，指向常量池的某项，描述方法的参数和返回值类型。
+- **描述符格式**：
+  - **参数类型**：用 `(参数类型...)` 表示。
+  - **返回值类型**：跟在参数后，`V` 表示 `void`。
+  - **示例**：
+    - `()V`：无参，返回 `void`。
+    - `(ID)Ljava/lang/String;`：接受 `int` 和 `double`，返回 `String`。
+
+------
+
+**(4) 属性表（attributes）**
+
+- **属性计数器（attributes_count）**：2字节，表示属性的数量。
+- **属性表（attributes[attributes_count]）**：每个属性是一个 `attribute_info` 结构。
+- **核心属性**：
+  - **`Code`**：方法的字节码指令和运行时信息（必选，非抽象/非本地方法）。
+  - **`Exceptions`**：方法声明抛出的异常。
+  - **`Signature`**：泛型签名（支持泛型的方法）。
+  - **`Deprecated`**：标记方法已过时。
+  - **`Synthetic`**：标记方法由编译器生成。
+
+#### 属性表
+
+JVM 字节码中的 **属性表（Attribute Table）** 是类文件结构中最灵活和复杂的一部分，用于描述类、字段、方法或代码块的附加信息。属性表可以出现在类文件、字段表、方法表或 `Code` 属性中，其结构具有高度扩展性。
+
+- attributes_ count（属性计数器）：表示当前文件属性表的成员个
+
+- attributes[]（属性表）：属性表的每个项的值必须是 attribute_info
+
+每个属性（`attribute_info`）的通用结构为:
+
+```bash
+attribute_name_index  | 2字节，指向常量池的 `CONSTANT_Utf8_info`，表示属性名
+attribute_length      | 4字节，属性的内容长度（不包括前6字节）
+info[attribute_length]| 属性的具体内容，结构因属性类型而异
+```
+
+JVM 规范预定义了多种标准属性，同时允许自定义属性（只要不与已有属性名重复），非标准属性会被 JVM 忽略。
+
+<img src="https://gitee.com/cmyk359/img/raw/master/img/7158aa33e5b0a631874fcb841e89b1c1-2025-2-314:27:45.jpeg" style="zoom:80%;" />
+
+<img src="https://gitee.com/cmyk359/img/raw/master/img/10e1a94ed54501b982b5bea80afe3649-2025-2-314:28:03.jpeg"  style="zoom:80%;" />
+
+部分属性详解：
+
+(1) Code属性
+
+Java程序方法体里面的代码经过Javac编译器处理之后，最终变为字节码指令存储在Code 属性内。Code 属性出现在方法表的属性集合之中，但并非所有的方法表都必须存在这个属性，譬如接口或者抽象类中的方法就不存在Code属性，如果方法表有Code属性存在，那么它的结构将如下：
+
+| 类型           | 名称                   | 数量             | 含义                     |
+| -------------- | ---------------------- | ---------------- | ------------------------ |
+| u2             | attribute_name_index   | 1                | 属性名索引               |
+| u4             | attribute_length       | 1                | 属性长度                 |
+| u2             | max_stack              | 1                | 操作数栈深度的最大值     |
+| u2             | max_locals             | 1                | 局部变量表所需的存续空间 |
+| u4             | code_length            | 1                | 字节码指令的长度         |
+| u1             | code                   | code_lenth       | 存储字节码指令           |
+| u2             | exception_table_length | 1                | 异常表长度               |
+| exception_info | exception_table        | exception_length | 异常表                   |
+| u2             | attributes_count       | 1                | 属性集合计数器           |
+| attribute_info | attributes             | attributes_count | 属性集合                 |
+
+- attribute _name_index 是一项指向 `CONSTANT_Utf8_info`型常量的索引，此常量值固定为“Code”，它代表了该属性的属性名称
+
+- attribute_length指示了属性值的长度
+
+- max_stack代表了操作数栈（Operand Stack）深度的最大值。在方法执行的任意时刻，操作数栈都不会超过这个深度。虚拟机运行的时候需要根据这个值来分配栈帧（Stack Frame）中的操作栈深度。
+
+- max_locals 代表了局部变量表所需的存储空间。在这里，max_locals的单位是变量槽（Slot），**变量槽是虚拟机为局部变量分配内存所使用的最小单位。**
+
+  对于byte、char、float、int、short、boolean和returnAddress等长度不超过32位的数据类型，每个局部变量占用一个变量槽，而double和long这两种64位的数据类型则需要两个变量槽来存放。
+
+  方法参数（包括实例方法中的隐藏参数“this”)、显式异常处理程序的参数(Exception Handler Parameter，就是try-catch 语句中catch块中所定义的异常)、方法体中定义的局部变量都需要依赖局部变量表来存放。
+
+  > 注意，并不是在方法中用了多少个局部变量，就把这些局部变量所占变量槽数量之和作为max_locals的值，操作数栈和局部变量表直接决定一个该方法的栈帧所耗费的内存，不必要的操作数栈深度和变量槽数量会造成内存的浪费。Java虚拟机的做法是将局部变量表中的变量槽进行**重用**，当代码执行超出一个局部变量的作用域时，这个局部变量所占的变量槽可以被其他局部变量所使用，Javac编译器会根据变量的作用域来分配变量槽给各个变量使用，**根据同时生存的最大局部变量数量和类型计算出max_locals的大小**。
+
+  
+
+- code length 和code 用来存储Java源程序编译后生成的字节码指令。code_length代表字节码长度，code 是用于存储字节码指令的一系列字节流。既然叫字节码指令，那顾名思义每个指令就是一个u1类型的单字节，当虚拟机读取到code中的一个字节码时，就可以对应找出这个字节码代表的是什么指令，并且可以知道这条指令后面是否需要跟随参数，以及后续的参数应当如何解析。
+
+使用`javap`工具反编译后，查看main方法对应的字节码
+
+![image-20250203152347474](https://gitee.com/cmyk359/img/raw/master/img/image-20250203152347474-2025-2-315:24:00.png)
+
+***
+
+（2）Exception属性
+
+列举出方法中可能抛出的受查异常，也就是方法描述时在`throws`关键字后面列举的异常
+
+***
+
+（3）LineNumberTable属性
+
+用于描述Java源码行号与字节码行号（字节码偏移量）之间的对应关系
+
+***
+
+（4）LocalVariableTable属性
+
+用于描述栈帧中局部变量表的变量与Java源码中定义的变量之间的关系。
+
+### 	后续内容参考
+
+由于时间原因，后面的笔记先不做了，先参考其他[课程笔记](https://blog.csdn.net/weixin_50280576/article/details/113784268)，有时间再补上.
+
+[其他参考笔记](https://blog.csdn.net/qq_42865148/article/details/144987594)
+

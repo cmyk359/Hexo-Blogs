@@ -3,7 +3,7 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 猫爪在上de书桌 # 网站标题
+title: 猫爪在上の书桌 # 网站标题
 subtitle: "" # 网站副标题
 description: "" # 网站描述
 keywords:
@@ -120,38 +120,33 @@ deploy:
 # hexo-oh-my-live2d 配置
 OhMyLive2d:
   enable: true
-  CDN: https://unpkg.com/oh-my-live2d
+  # CDN: https://registry.npmmirror.com/oh-my-live2d/latest/files
+  CDN: https://catpaws.top/blog-resource/live2d/index.min.js
   option:
     dockedPosition: "left" # 模型停靠位置 默认值: 'right' 可选值: 'left' | 'right'
-    # menus: |
-    #   (currentModel) =>{
-    #     console.log(currentModel);
+    # menus:
+    # items: |
+    #   (defaultItems)=>{
+    #    return [
+    #      ...defaultItems,
+    #      {
+    #        id: 'github',
+    #        icon: 'github-fill',
+    #        title: '我的github',
+    #        onClick: ()=>window.open('https://github.com/hacxy')
+    #      }
+    #    ]
     #   }
 
-    # menus:
-    #   items: |
-    #     (defaultItems)=>{
-    #      return [
-    #        ...defaultItems,
-    #        {
-    #          id: 'github',
-    #          icon: 'github-fill',
-    #          title: '我的github',
-    #          onClick: ()=>window.open('https://github.com/hacxy')
-    #        }
-    #      ]
-    #     }
-
-    #   items:
-    #     - id: 'github'
-    #       icon: 'github-fill'
-    #       title: '我的github'
-    #       onClick: ()=>window.open('https://github.com/hacxy')
+    # items:
+    #   - id: 'github'
+    #     icon: 'github-fill'
+    #     title: '我的github'
+    #     onClick: ()=>window.open('https://github.com/hacxy')
 
     mobileDisplay: false # 是否在移动端显示
     models:
-      - #path: https://cdn.jsdelivr.net/gh/cmyk359/MyCDN/Hexo/static/live2d/Frieren/Frieren.model3.json # 模型文件路径
-        path: https://catpaws.top/blog-resource/live2d/Frieren/Frieren.model3.json
+      - path: https://catpaws.top/blog-resource/live2d/Frieren/Frieren.model3.json
         # mobilePosition: [-10, 23] # 移动端时模型在舞台中的位置。 默认值: [0,0] [横坐标, 纵坐标]
         # mobileScale: 0.1 # 移动端时模型的缩放比例 默认值: 0.1
         # mobileStageStyle: # 移动端时舞台的样式
@@ -165,25 +160,6 @@ OhMyLive2d:
           width: 250
           height: 350
 
-      #其他模型
-      #   - path: 'https://registry.npmmirror.com/live2d-widget-model-koharu/1.0.5/files/assets/koharu.model.json'
-      #   scale: 0.12
-      #   position: [0, 0]
-      #   stageStyle:
-      #     width: 250
-      #   mobileScale: 0.08
-      #   mobilePosition: [0, 0]
-      #   mobileStageStyle: # 移动端时舞台的样式
-      #     width: 180
-      # - path: 'https://registry.npmmirror.com/live2d-widget-model-haruto/1.0.5/files/assets/haruto.model.json'
-      #   scale: 0.12
-      #   position: [0, 0]
-      #   mobileScale: 0.08
-      #   mobilePosition: [0, 0]
-      #   mobileStageStyle: # 移动端时舞台的样式
-      #     width: 180
-      #   stageStyle:
-      #     width: 250
     parentElement: document.body #为组件提供一个父元素，如果未指定则默认挂载到 body 中
     primaryColor: "var(--btn-bg)" # 主题色 支持变量
     sayHello: false # 是否在初始化阶段打印项目信息
@@ -199,33 +175,34 @@ OhMyLive2d:
       #   height: 80
       #   left: calc(50% - 30px)
       #   top: -100px
-      idleTips:
-        interval: 15000
-        # message:
-        #   - 你好呀~
-        #   - 欢迎来到我的小站~
-        # 自定义提示语 需要 引入 axios 库 ,也可以使用其他方法
-        message: |
-          function(){
-            return axios.get('https://v1.hitokoto.cn?c=i')
-              .then(function (response) {
-                return response.data.hitokoto ;
-              })
-              .catch(function (error) {
-                console.error(error);
-              });
-          }
-        # wordTheDay: true
-        # 自定义  https://v1.hitokoto.cn  数据
-        # wordTheDay: |
-        #   function(wordTheDayData){
-        #     return `${wordTheDayData.hitokoto}    by.${wordTheDayData.from}`;
-        #   }
-  # 具体方法请看: https://oml2d.com/guide/loadModel.html#oml2d-%E5%AE%9E%E4%BE%8B
-  # then: |
-  #    oml2d.onStageSlideIn(() => {
-  #    oml2d.tipsMessage('Oh My Live2D !!!', 3000, 10);
-  #    });
+      # idleTips:
+      #   interval: 15000
+      #   # message:
+      #   #   - 你好呀~
+      #   #   - 欢迎来到我的小站~
+      #   # 自定义提示语 需要 引入 axios 库 ,也可以使用其他方法
+      #   message: |
+      #     function(){
+      #       return axios.get('https://v1.hitokoto.cn?c=i')
+      #         .then(function (response) {
+      #           return response.data.hitokoto ;
+      #         })
+      #         .catch(function (error) {
+      #           console.error(error);
+      #         });
+      #     }
+      # wordTheDay: true
+      # 自定义  https://v1.hitokoto.cn  数据
+      # wordTheDay: |
+      #   function(wordTheDayData){
+      #     return `${wordTheDayData.hitokoto}    by.${wordTheDayData.from}`;
+      #   }
+    # then: |
+    #   (oml2d)=>{
+    #      setTimeout(() => {
+    #     oml2d.tipsMessage('hello world', 3000, 10);
+    #   }, 8000);
+    #   }
 
 # Generate categories from directory-tree
 # Dependencies: https://github.com/xu-song/hexo-auto-category
