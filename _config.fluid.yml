@@ -249,8 +249,7 @@ custom_js:
 # The usage is the same as custom_js
 custom_css: 
     - //catpaws.top/blog-resource/css/custom.css
-    # - //catpaws.top/blog-resource/css/font.css
-    - /css/font.css
+    - //catpaws.top/blog-resource/css/font.css
     - //catpaws.top/blog-resource/css/poem.css 
     - //catpaws.top/blog-resource/css/cursor.css
     - //catpaws.top/blog-resource/css/loader.css
