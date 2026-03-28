@@ -248,7 +248,9 @@ custom_js:
 # 指定自定义 .css 文件路径，用法和 custom_js 相同
 # The usage is the same as custom_js
 custom_css: 
-    - //catpaws.top/blog-resource/css/font.css
+    - //catpaws.top/blog-resource/css/custom.css
+    # - //catpaws.top/blog-resource/css/font.css
+    - /css/font.css
     - //catpaws.top/blog-resource/css/poem.css 
     - //catpaws.top/blog-resource/css/cursor.css
     - //catpaws.top/blog-resource/css/loader.css
@@ -258,7 +260,6 @@ custom_css:
     - //catpaws.top/blog-resource/css/blurpicload.css
     - //catpaws.top/blog-resource/css/reward/iconfont.css
     - //catpaws.top/blog-resource/css/switch.css
-
 # 网页访问统计
 # Analysis of website visitors
 web_analytics:

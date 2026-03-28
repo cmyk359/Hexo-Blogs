@@ -1,0 +1,14 @@
+/* 定义霞鹜文楷字体 */
+@font-face {
+  font-family: 'LXGW WenKai';
+  src: url('https://catpaws.top/blog-resource/font/LXGWWenKai.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+html,
+body,
+.markdown-body,
+p {
+  font-family: 'LXGW WenKai'
+}
